@@ -77,6 +77,18 @@ if [ $? == 0 ]; then
    fpm_type=`php5-fpm -i 2>&1 | grep "SERVER\[\"_\"\]" | cut -d\/ -f4`
 fi
 
+php-fpm7.3 -v 1> /dev/null 2>&1
+if [ $? == 0 ]; then
+   phpfpm_installed=1
+   fpm_type=`php-fpm7.3 -i 2>&1 | grep "SERVER\[\"_\"\]" | cut -d\/ -f4`
+fi
+
+php-fpm7.4 -v 1> /dev/null 2>&1
+if [ $? == 0 ]; then
+   phpfpm_installed=1
+   fpm_type=`php-fpm7.4 -i 2>&1 | grep "SERVER\[\"_\"\]" | cut -d\/ -f4`
+fi
+
 ### Exit if PHP-FPM is not installed
 if [ $phpfpm_installed == 0 ]; then
    echo -e "\e[31m!!! PHP-FPM not detected. Exiting. !!!\e[0m"
@@ -423,9 +435,26 @@ echo -n "Memory available to assign to PHP-FPM pools in KB: "
    if [ -f /etc/redhat-release ]; then
       rhel7_check=`grep -v ^# /etc/redhat-release | awk -F "release" '{print $2}' | awk '{print $1}' | cut -d. -f1` > /dev/null
    fi
-   # If this is RHEL 7 then use this formula
-   if [ $rhel7_check == '7' ]; then
-      total_phpfpm_allowed_memory=$(echo "`free -k | awk '/Mem/ {print $7}'` + $total_phpfpm_mem_usage" | bc)
+
+	# Ubuntu 18.04/16.04 free report looks different so we use a different formula
+	ubuntu1804_check=0
+	if [ -f /etc/lsb-release ]; then
+		ubuntu1804_check=`grep DISTRIB_ID /etc/lsb-release | cut -d= -f2`
+		if [ $ubuntu1804_check == 'Ubuntu' ]; then
+			ubuntu1804_check=`grep DISTRIB_RELEASE /etc/lsb-release | cut -d= -f2`
+			if [ $ubuntu1804_check == '18.04' ] || [ $ubuntu1804_check == '16.04' ]; then
+				ubuntu1804_check=1
+			else
+				ubuntu1804_check=0
+			fi
+		else
+			ubuntu1804_check=0
+		fi
+	fi
+
+	# If this is RHEL 7 or Ubuntu 18.04/16.04 then use this formula
+	if [ $rhel7_check == '7' ] || [ $ubuntu1804_check == '1' ]; then
+		total_phpfpm_allowed_memory=$(echo "`free -k | awk '/Mem/ {print $7}'` + $total_phpfpm_mem_usage" | bc)
    # If this is not RHEL 7 use this formula
    else
       total_phpfpm_allowed_memory=$(echo "`free -k | awk '/buffers\/cache/ {print $4}'` + $total_phpfpm_mem_usage" | bc)
