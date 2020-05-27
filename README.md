@@ -1,3 +1,6 @@
+## Script usage
+  # curl -sL https://raw.githubusercontent.com/kadai/php-fpmpal/master/php-fpmpal.01.sh | bash
+
 # php-fpmpal
 Bash script script that makes recommendations on max_children for each PHP-FPM pool on a server.
 
