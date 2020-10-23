@@ -1,7 +1,7 @@
 ## Script usage
 You can use this script by running in console:
 
-    # curl -sL https://raw.githubusercontent.com/kadai/php-fpmpal/master/php-fpmpal.01.sh | bash
+    # curl -sL https://raw.githubusercontent.com/haxcop/php-fpmpal/master/php-fpmpal.01.sh | bash
 
 The original readme file is shown below.
 
