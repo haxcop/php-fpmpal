@@ -238,7 +238,7 @@ function display_pool_information() {
 
 		### Total potential memory usage for pool based on average process size: max_children * average process size
 		potential_mem_usage=$(echo "$current_max_children_value * ${pool_ave_process_size[$i]}" | bc)
-		let total_phpfpm_mem_usage_average_process+=$potential_mem_usage
+		let total_phpfpm_mem_usage_average_process+=${potential_mem_usage[$i]}
 	done
 
 }
