@@ -80,11 +80,11 @@ if [ $? == 0 ]; then
    for cpanel_php_fpm in $(ls /opt/cpanel/ea-php*/root/usr/sbin/php-fpm); do $cpanel_php_fpm -i > /dev/null 2>&1; done
 fi
 
-for webuzo_php_fpm in $(ls /usr/local/apps/php*/sbin/php-fpm); do $webuzo_php_fpm -v > /dev/null 2>&1; done
+for webuzo_php_fpm in $(ls /usr/local/apps/php73/sbin/php-fpm); do $webuzo_php_fpm -v > /dev/null 2>&1; done
 if [ $? == 0 ]; then
    phpfpm_installed=1
-   webuzo_php_fpm= $(ls /usr/local/apps/php*/sbin/php-fpm) > /dev/null
-   for webuzo_php_fpm in $(ls /usr/local/apps/php*/sbin/php-fpm); do $webuzo_php_fpm -i > /dev/null 2>&1; done
+   webuzo_php_fpm= $(ls /usr/local/apps/php73/sbin/php-fpm) > /dev/null
+   for webuzo_php_fpm in $(ls /usr/local/apps/php73/sbin/php-fpm); do $webuzo_php_fpm -i > /dev/null 2>&1; done
 fi
 
 	if [ $phpfpm_installed == 0 ]; then # Exit if PHP-FPM is not installed
