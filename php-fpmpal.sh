@@ -89,6 +89,13 @@ if [ $? == 0 ]; then
    fpm_type=`php-fpm7.4 -i 2>&1 | grep "SERVER\[\"_\"\]" | cut -d\/ -f4`
 fi
 
+for webuzo_php_fpm in $(ls /usr/local/apps/php73/sbin/php-fpm); do $webuzo_php_fpm -v > /dev/null 2>&1; done
+if [ $? == 0 ]; then
+   phpfpm_installed=1
+   webuzo_php_fpm= $(ls /usr/local/apps/php73/sbin/php-fpm) > /dev/null
+   for webuzo_php_fpm in $(ls /usr/local/apps/php73/sbin/php-fpm); do $webuzo_php_fpm -i > /dev/null 2>&1; done
+fi
+
 ### Exit if PHP-FPM is not installed
 if [ $phpfpm_installed == 0 ]; then
    echo -e "\e[31m!!! PHP-FPM not detected. Exiting. !!!\e[0m"
